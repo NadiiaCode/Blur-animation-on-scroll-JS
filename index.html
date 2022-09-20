@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js' integrity='sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA==' crossorigin='anonymous'></script>
+</head>
+
+<body>
+    <header>
+        <div class="content">
+            <hgroup>
+                <h1>SKYLINE Construction Co</h1>
+                <p>Building the future. Restoring the past.</p>
+            </hgroup>
+        </div>
+    </header>
+    <section class="site">
+        <nav>
+            <a href="">About us</a>
+            <a href="">Residential</a>
+            <a href="">Commercial</a>
+            <a href="">Services</a>
+            <a href="">Contact us</a>
+        </nav>
+    </section>
+
+    <style>
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        
+        header {
+            height: 100%;
+            background: url(./1.jpg) center no-repeat;
+            background-size: cover;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .content {
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            position: absolute;
+            z-index: 1;
+        }
+        
+        hgroup {
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            position: absolute;
+            padding: 30px 50px;
+            display: inline-block;
+            text-align: center;
+            color: #ffffff;
+            border: 6px solid #ffffff;
+            background-color: rgba(0, 0, 0, 0.35);
+            z-index: 2;
+        }
+        
+        h1 {
+            margin: 0;
+            font-size: 45px;
+            line-height: 1.5;
+            font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+        }
+        
+        p {
+            font-size: 25px;
+            font-family: cursive;
+        }
+        
+        .site {
+            padding: 700px 0;
+            position: relative;
+            text-align: right;
+            font-size: 20px;
+            font-family: monospace;
+            font-weight: bolder;
+        }
+        
+        .site nav {
+            width: 100%;
+            top: 0;
+            left: 0;
+            position: absolute;
+            background: #d3d3d3;
+            border-top: 3px solid #b3b3b3;
+        }
+        
+        .site a {
+            text-decoration: none;
+            color: #7e7e7e;
+        }
+        
+        .site nav a {
+            padding: 15px 10px;
+            display: inline-block;
+            font-size: 25px;
+        }
+        
+        .site nav a:hover {
+            background: #b3b3b3;
+            color: #ffffff;
+        }
+    </style>
+    <script>
+        var $content = $("header .content"),
+            $blur = $("header .overlay"),
+            windowsHeight = $(window).height();
+
+        $(window).on("resize", function() {
+            windowsHeight = $(window).height();
+        });
+
+        window.scrollAnimation = (function() {
+            return window.requestAnimationFrame ||
+                function(callback) {
+                    window.setTimeout(callback, 1000 / 60);
+                };
+        })();
+
+        function Scroller() {
+            this.verticalScroll = 0;
+            this.scrollPosition = false;
+        }
+
+        Scroller.prototype = {
+            init: function() {
+                window.addEventListener("scroll", this.onScroll.bind(this), false);
+                $blur.css("background-image", $("header:first-of-type").css("background-image"));
+            },
+
+            onScroll: function() {
+                this.verticalScroll = window.scrollY;
+                this.requestTick();
+            },
+
+            requestTick: function() {
+                if (!this.scrollPosition) {
+                    window.scrollAnimation(this.update.bind(this));
+                }
+                this.scrollPosition = true;
+            },
+
+            update: function() {
+                var currentScrollPosition = this.verticalScroll;
+                this.scrollPosition = false;
+
+                var slowScroll = currentScrollPosition / 2,
+                    blurOnScroll = currentScrollPosition * 2,
+                    opacityOnScroll = 1.6 - currentScrollPosition / 400;
+                if (currentScrollPosition > windowsHeight)
+                    $("nav").css("position", "fixed");
+                else
+                    $('nav').css("position", "absolute");
+
+                $content.css({
+                    "transform": "translateY(" + slowScroll + "px)",
+                    "opacity": opacityOnScroll
+                });
+
+                $blur.css({
+                    "opacity": blurOnScroll / windowsHeight
+                });
+            }
+        };
+
+        var scroller = new Scroller();
+        scroller.init();
+    </script>
+</body>
+
+</html>
